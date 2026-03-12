@@ -1,4 +1,5 @@
 # Smart Blood Donor Eligibility Screening System
+# THIS PROJECT IS TO BE IMPROVED
 
 ## Project Overview
 
