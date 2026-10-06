@@ -5,7 +5,7 @@ import json
 import os
 import re
 
-# ── Colour palette ──────────────────────────────────────────────────────────
+
 COLORS = {
     "bg":           "#F5F7FA",
     "surface":      "#FFFFFF",
@@ -64,7 +64,7 @@ BLOOD_TYPE_COMPATIBILITY = {
 }
 
 
-# ── Utility helpers ──────────────────────────────────────────────────────────
+
 
 def load_history():
     if os.path.exists(HISTORY_FILE):
@@ -84,7 +84,7 @@ def save_history(records):
         pass
 
 
-# ── Custom widgets ───────────────────────────────────────────────────────────
+
 
 class Divider(tk.Frame):
     def __init__(self, parent, **kw):
@@ -178,7 +178,7 @@ class SectionHeader(tk.Frame):
                  fg=COLORS["secondary"]).pack(side="left")
 
 
-# ── Main Application ─────────────────────────────────────────────────────────
+
 
 class BloodDonorSystem:
 
@@ -215,7 +215,7 @@ class BloodDonorSystem:
         self.smoker_var         = tk.BooleanVar()
         self.alcohol_var        = tk.BooleanVar()
 
-    # ── UI Structure ─────────────────────────────────────────────────────────
+
 
     def _build_ui(self):
         self._build_header()
@@ -288,7 +288,7 @@ class BloodDonorSystem:
         if page_id == "history":
             self._refresh_history()
 
-    # ── Page: Eligibility ────────────────────────────────────────────────────
+
 
     def _build_eligibility_page(self):
         page = tk.Frame(self.content_frame, bg=COLORS["bg"])
@@ -308,7 +308,7 @@ class BloodDonorSystem:
 
         sf = self.scroll_frame
 
-        # ── Section 1: Personal Info ──
+  
         card1 = Card(sf, title="  Personal Information")
         card1.pack(fill="x", pady=(0, 10))
         grid1 = tk.Frame(card1, bg=COLORS["surface"])
@@ -340,7 +340,7 @@ class BloodDonorSystem:
         LabeledField(grid1, "Weight (kg) *", self.weight_var, "≥50 kg", width=12).grid(row=1, column=1, padx=6, pady=4, sticky="ew")
         LabeledField(grid1, "Last Donation (YYYY-MM-DD)", self.last_donation_var, "optional", width=16).grid(row=1, column=2, padx=6, pady=4, sticky="ew")
 
-        # ── Section 2: Health Vitals ──
+     
         card2 = Card(sf, title="  Health Vitals")
         card2.pack(fill="x", pady=(0, 10))
         grid2 = tk.Frame(card2, bg=COLORS["surface"])
@@ -353,7 +353,7 @@ class BloodDonorSystem:
         LabeledField(grid2, "Medical Conditions", self.medical_var, "e.g. hepatitis, cancer…", width=30).grid(row=1, column=0, columnspan=2, padx=6, pady=4, sticky="ew")
         LabeledField(grid2, "Current Medications", self.medications_var, "e.g. aspirin, warfarin…", width=30).grid(row=1, column=2, padx=6, pady=4, sticky="ew")
 
-        # ── Section 3: Risk Factors ──
+   
         card3 = Card(sf, title="  Risk & Deferral Factors")
         card3.pack(fill="x", pady=(0, 10))
         risk_grid = tk.Frame(card3, bg=COLORS["surface"])
@@ -383,7 +383,7 @@ class BloodDonorSystem:
             tk.Label(txt_f, text=label, font=F_BODY, bg=COLORS["surface"], fg=COLORS["text"]).pack(anchor="w")
             tk.Label(txt_f, text=note,  font=F_SMALL, bg=COLORS["surface"], fg=COLORS["text_muted"]).pack(anchor="w")
 
-        # ── Action buttons ──
+      
         btn_row = tk.Frame(sf, bg=COLORS["bg"])
         btn_row.pack(fill="x", pady=(0, 10))
         IconButton(btn_row, "  ✔  Check Eligibility", self._check_eligibility).pack(side="left", padx=(0,8))
@@ -399,7 +399,7 @@ class BloodDonorSystem:
 
         return page
 
-    # ── Page: Compatibility ──────────────────────────────────────────────────
+  
 
     def _build_compatibility_page(self):
         page = tk.Frame(self.content_frame, bg=COLORS["bg"])
@@ -446,7 +446,7 @@ class BloodDonorSystem:
         for t in info.get("receives_from", []):
             Badge(rf, t, kind="info").pack(side="left", padx=3, pady=3)
 
-        # Universal donor/recipient note
+       
         note = ""
         if bt == "O-": note = "🏅  Universal Donor — can give to all blood types."
         elif bt == "AB+": note = "🏅  Universal Recipient — can receive from all blood types."
@@ -479,7 +479,7 @@ class BloodDonorSystem:
                 tk.Label(tbl_f, text=txt, bg=bg, fg=fg,
                          font=(FONT_FAMILY, 9, "bold"), width=5, pady=3).grid(row=ri+1, column=ci+1, padx=1, pady=1)
 
-    # ── Page: History ────────────────────────────────────────────────────────
+  
 
     def _build_history_page(self):
         page = tk.Frame(self.content_frame, bg=COLORS["bg"])
@@ -590,7 +590,7 @@ class BloodDonorSystem:
 
         return page
 
-    # ── Eligibility Logic ────────────────────────────────────────────────────
+   
 
     def _check_eligibility(self):
         reasons = []
@@ -649,7 +649,7 @@ class BloodDonorSystem:
                 if dia_bp < 60 or dia_bp > 100:
                     reasons.append(("Blood Pressure", f"Diastolic {dia_bp} mmHg out of range (60–100)"))
 
-        # ── Risk factors ──
+        
         if self.recent_surgery_var.get():
             reasons.append(("Surgery",      "Recent surgery within 6 months"))
         if self.recent_tattoo_var.get():
@@ -663,13 +663,13 @@ class BloodDonorSystem:
         if self.smoker_var.get():
             warnings.append("Smoker — advised to wait 2 hours before and after donation")
 
-        # ── Medical conditions ──
+     
         conds = self.medical_var.get().lower()
         for c in HIGH_RISK_CONDITIONS:
             if c in conds:
                 reasons.append(("Medical Condition", f"'{c}' is a deferral condition"))
 
-        # ── Medications ──
+    
         meds = self.medications_var.get().lower()
         for m in RISKY_MEDICATIONS:
             if m in meds:
@@ -677,7 +677,7 @@ class BloodDonorSystem:
 
         is_eligible = len(reasons) == 0
 
-        # ── Save to history ──
+      
         self.history.append({
             "timestamp":  datetime.now().strftime("%Y-%m-%d %H:%M"),
             "name":       name,
@@ -748,8 +748,7 @@ class BloodDonorSystem:
                      font=F_BODY, bg=COLORS["success_bg"], fg=COLORS["accent"],
                      padx=10, pady=6).pack(fill="x")
 
-    # ── Helpers ──────────────────────────────────────────────────────────────
-
+   
     def _parse_number(self, val, field, cast=float, min_val=None, max_val=None, silent=False):
         try:
             n = cast(val.strip())
@@ -794,7 +793,6 @@ class BloodDonorSystem:
                  font=F_BODY, bg=COLORS["surface"], fg=COLORS["text_muted"]).pack(pady=10)
 
 
-# ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     root = tk.Tk()
